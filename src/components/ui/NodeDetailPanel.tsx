@@ -3,7 +3,7 @@
 import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
 
-import { RepoLinks } from "@/components/ui/RepoLinks";
+import { SourceLinks } from "@/components/ui/SourceLinks";
 import { StatusLed } from "@/components/ui/StatusLed";
 import { Tag } from "@/components/ui/Tag";
 import { useAppStore } from "@/store/useAppStore";
@@ -113,13 +113,13 @@ export function NodeDetailPanel() {
         ) : null}
 
         {/* Above the highlights on purpose: the panel scrolls, and the source
-            links are the thing a recruiter is most likely to want. */}
-        {detail.repos?.length ? (
+            status is the thing a recruiter is most likely to want. */}
+        {detail.source ? (
           <section className="mt-5">
             <h3 className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
               Source
             </h3>
-            <RepoLinks repos={detail.repos} context={detail.title} />
+            <SourceLinks source={detail.source} context={detail.title} />
           </section>
         ) : null}
 

@@ -50,6 +50,20 @@ export interface RepoLink {
   url: string;
 }
 
+/**
+ * Where the source for a record lives.
+ *
+ * A closed record carries no URL at all. The 88ninety and Khawla repositories
+ * are private enterprise repositories, so any link to them would 404 for a
+ * visitor; the UI shows a locked badge instead of a dead link.
+ */
+export type SourceAccess =
+  | { visibility: "public"; repos: RepoLink[] }
+  | { visibility: "private"; note: string };
+
+/** Wording reused by every closed record, so the badges read identically. */
+export const PRIVATE_SOURCE_NOTE = "Private Enterprise Repo (NDA)";
+
 export interface Experience {
   id: string;
   role: string;
@@ -58,8 +72,8 @@ export interface Experience {
   period: string;
   stack: string[];
   highlights: string[];
-  /** Public repositories for the work, omitted when the source is private. */
-  repos?: RepoLink[];
+  /** How the source can be reached, omitted when there is no repository. */
+  source?: SourceAccess;
 }
 
 export interface Project {
@@ -70,8 +84,8 @@ export interface Project {
   summary: string;
   stack: string[];
   highlights: string[];
-  /** Public repositories for the work, omitted when the source is private. */
-  repos?: RepoLink[];
+  /** How the source can be reached, omitted when there is no repository. */
+  source?: SourceAccess;
 }
 
 export interface Certification {
@@ -203,16 +217,7 @@ export const EXPERIENCES: Experience[] = [
       "Implemented Magic Bytes validation to mitigate DoS.",
       "Wrote xUnit integration tests.",
     ],
-    repos: [
-      {
-        label: "Backend",
-        url: "https://github.com/88ninety/hospital-storage-management",
-      },
-      {
-        label: "Frontend",
-        url: "https://github.com/88ninety/hospital-storage-management-ui",
-      },
-    ],
+    source: { visibility: "private", note: PRIVATE_SOURCE_NOTE },
   },
 ];
 
@@ -243,12 +248,7 @@ export const PROJECTS: Project[] = [
       "100% data consistency",
       "Firebase for real-time notifications",
     ],
-    repos: [
-      {
-        label: "Source",
-        url: "https://github.com/khawla-school/khawla-server-app",
-      },
-    ],
+    source: { visibility: "private", note: PRIVATE_SOURCE_NOTE },
   },
   {
     id: "staysphere-api",
@@ -262,12 +262,15 @@ export const PROJECTS: Project[] = [
       "Minimized property search times by 75%",
       "Optimized relational database queries",
     ],
-    repos: [
-      {
-        label: "Source",
-        url: "https://github.com/MotazAl-Masri/StaySphere-API",
-      },
-    ],
+    source: {
+      visibility: "public",
+      repos: [
+        {
+          label: "Source",
+          url: "https://github.com/MotazAl-Masri/StaySphere-API",
+        },
+      ],
+    },
   },
 ];
 

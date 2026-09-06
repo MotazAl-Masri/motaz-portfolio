@@ -2,7 +2,7 @@
 
 import { ChevronRight, Server } from "lucide-react";
 
-import { RepoLinks } from "@/components/ui/RepoLinks";
+import { SourceLinks } from "@/components/ui/SourceLinks";
 import { StatusLed } from "@/components/ui/StatusLed";
 import { useAppStore, type NodeKind } from "@/store/useAppStore";
 import { resolveNodeDetail } from "@/utils/nodeDetail";
@@ -118,12 +118,12 @@ function FallbackRecord({
         </div>
       ))}
 
-      {detail.repos?.length ? (
+      {detail.source ? (
         <div className="mt-3.5">
           <h4 className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
             Source
           </h4>
-          <RepoLinks repos={detail.repos} context={detail.title} />
+          <SourceLinks source={detail.source} context={detail.title} />
         </div>
       ) : null}
 

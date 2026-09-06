@@ -1,4 +1,9 @@
-import { EXPERIENCES, PROJECTS, SKILL_GROUPS, type RepoLink } from "@/data";
+import {
+  EXPERIENCES,
+  PROJECTS,
+  SKILL_GROUPS,
+  type SourceAccess,
+} from "@/data";
 import type { NodeRef } from "@/store/useAppStore";
 
 export interface NodeDetailList {
@@ -13,8 +18,8 @@ export interface NodeDetail {
   meta: string;
   summary?: string;
   lists: NodeDetailList[];
-  /** Public source repositories, absent for records that have none. */
-  repos?: RepoLink[];
+  /** How the source can be reached, absent for records that have none. */
+  source?: SourceAccess;
 }
 
 /**
@@ -37,7 +42,7 @@ export function resolveNodeDetail(node: NodeRef): NodeDetail | null {
         { label: "Highlights", items: project.highlights },
         { label: "Stack", items: project.stack },
       ],
-      repos: project.repos,
+      source: project.source,
     };
   }
 
@@ -65,6 +70,6 @@ export function resolveNodeDetail(node: NodeRef): NodeDetail | null {
       { label: "Highlights", items: experience.highlights },
       { label: "Stack", items: experience.stack },
     ],
-    repos: experience.repos,
+    source: experience.source,
   };
 }
