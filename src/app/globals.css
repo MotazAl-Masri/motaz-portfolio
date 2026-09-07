@@ -17,13 +17,21 @@
 
   /* Energy / data flow */
   --color-core: #00f0ff;
-  --color-core-dim: #0e7f8c;
+  /* Dimmed cyan. Used as label text as well as a hover border, so it has to
+     carry contrast of its own: #0e7f8c only reached 4.3:1. */
+  --color-core-dim: #33a3b1; /* 6.8:1 */
   --color-core-deep: #063a41;
 
-  /* Type */
-  --color-signal: #e6edf3;
-  --color-muted: #8a949f;
-  --color-faint: #5b656f;
+  /* Live/production status. Matches LED_ACTIVE in the 3D scene, so a shipped
+     system reads the same colour on a badge as on a rack light. */
+  --color-live: #3ee08a;
+
+  /* Type — contrast ratios are against the #050505 page ground. Every value
+     here clears WCAG AA (4.5:1) at the 10-11px mono sizes the technical
+     captions run at, which the previous muted/faint pair did not. */
+  --color-signal: #e6edf3; /* 15.9:1 — headings, values */
+  --color-muted: #b4bec9; /* 10.8:1 — body copy, was #8a949f (7.2:1) */
+  --color-faint: #8d98a4; /*  7.0:1 — captions, was #5b656f (3.5:1, failed) */
 }
 
 @theme inline {
@@ -163,6 +171,25 @@
 
 .animate-caret {
   animation: caret 1s step-end infinite;
+}
+
+/* Horizontal nudge for the "click a drive" pointer. It aims at the rack
+   column, so it is only rendered on the layouts where that column exists.
+   `translate` rather than `transform`, for the same reason as panel-in. */
+@keyframes nudge-x {
+  0%,
+  100% {
+    translate: 0 0;
+    opacity: 0.5;
+  }
+  50% {
+    translate: 6px 0;
+    opacity: 1;
+  }
+}
+
+.animate-nudge-x {
+  animation: nudge-x 1.6s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

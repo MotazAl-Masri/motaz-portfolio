@@ -72,6 +72,12 @@ export interface Experience {
   period: string;
   stack: string[];
   highlights: string[];
+  /**
+   * Set only where the system was actually delivered and is running in a real
+   * production environment — never as decoration. It drives the
+   * "Live in production" badge, which is the first thing a recruiter reads.
+   */
+  isLive?: boolean;
   /** How the source can be reached, omitted when there is no repository. */
   source?: SourceAccess;
 }
@@ -84,6 +90,8 @@ export interface Project {
   summary: string;
   stack: string[];
   highlights: string[];
+  /** Delivered and running in production. See {@link Experience.isLive}. */
+  isLive?: boolean;
   /** How the source can be reached, omitted when there is no repository. */
   source?: SourceAccess;
 }
@@ -217,6 +225,7 @@ export const EXPERIENCES: Experience[] = [
       "Implemented Magic Bytes validation to mitigate DoS.",
       "Wrote xUnit integration tests.",
     ],
+    isLive: true,
     source: { visibility: "private", note: PRIVATE_SOURCE_NOTE },
   },
 ];
@@ -248,6 +257,7 @@ export const PROJECTS: Project[] = [
       "100% data consistency",
       "Firebase for real-time notifications",
     ],
+    isLive: true,
     source: { visibility: "private", note: PRIVATE_SOURCE_NOTE },
   },
   {

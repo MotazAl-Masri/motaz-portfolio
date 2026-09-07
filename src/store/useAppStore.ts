@@ -23,9 +23,19 @@ interface AppState {
   isMenuOpen: boolean;
   /** Set once the 3D scene has compiled and painted its first frame. */
   isSceneReady: boolean;
+  /**
+   * Set once the boot overlay has been removed from the DOM.
+   *
+   * The scroll rig measures section geometry when it builds its timeline, and
+   * during boot those measurements are provisional: web fonts are still
+   * swapping in and the overlay is still mounted. This is the signal to
+   * re-measure — see `useScrollCamera`.
+   */
+  isBootComplete: boolean;
   selectedNode: NodeRef | null;
   hoveredNodeId: string | null;
   setSceneReady: () => void;
+  setBootComplete: () => void;
   setActiveSection: (section: SectionId) => void;
   setMenuOpen: (open: boolean) => void;
   toggleMenu: () => void;
@@ -38,10 +48,12 @@ export const useAppStore = create<AppState>((set) => ({
   activeSection: "home",
   isMenuOpen: false,
   isSceneReady: false,
+  isBootComplete: false,
   selectedNode: null,
   hoveredNodeId: null,
 
   setSceneReady: () => set({ isSceneReady: true }),
+  setBootComplete: () => set({ isBootComplete: true }),
 
   setActiveSection: (section) =>
     set((state) => {

@@ -13,8 +13,21 @@ import {
   toCartesian,
   type CameraKeyframe,
 } from "@/components/3d/cameraPath";
+import { useAppStore } from "@/store/useAppStore";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+/**
+ * A mobile address bar sliding away fires a window resize, and ScrollTrigger's
+ * default answer is a full refresh — re-measuring mid-scroll and snapping the
+ * camera to the new numbers. Ignoring vertical-only resizes on touch devices
+ * leaves the two refreshes that are actually meaningful: the explicit one after
+ * boot, below, and the rebuild `useLayoutKey` fires on a real layout change.
+ *
+ * Module scope is safe here: this file only ever loads inside the canvas, which
+ * is dynamically imported with `ssr: false`.
+ */
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 /**
  * Portrait viewports share the vertical FOV but have a far narrower horizontal
@@ -194,6 +207,7 @@ export function useScrollCamera(enabled: boolean): void {
   const subject = useMemo(() => new Vector3(), []);
   const right = useMemo(() => new Vector3(), []);
   const layoutKey = useLayoutKey();
+  const isBootComplete = useAppStore((state) => state.isBootComplete);
 
   useGSAP(
     () => {
@@ -288,4 +302,47 @@ export function useScrollCamera(enabled: boolean): void {
       ],
     },
   );
+
+  /**
+   * Re-measure once the page has actually settled.
+   *
+   * The timeline above is built as soon as the canvas mounts, which on a cold
+   * load is while the boot overlay is still up and the web fonts have not
+   * swapped in yet. Both change how tall the sections are, so the start/end
+   * pixels ScrollTrigger recorded are stale by the time anyone scrolls — on a
+   * phone, where the address bar collapse moves them again, that is what made
+   * the opening camera move lurch.
+   *
+   * `invalidateOnRefresh` is already set on the trigger, so the refresh also
+   * throws away the tween start values and re-reads them from the fresh
+   * geometry rather than replaying the ones captured during boot.
+   *
+   * `useGSAP` runs as a layout effect, and layout effects all flush before
+   * passive ones — so on both the first mount and a `layoutKey` rebuild the
+   * timeline already exists by the time this asks for the re-measure.
+   */
+  useEffect(() => {
+    if (!enabled || !isBootComplete) return;
+
+    let cancelled = false;
+    let frame = 0;
+
+    const refresh = () => {
+      frame = window.requestAnimationFrame(() => {
+        if (!cancelled) ScrollTrigger.refresh();
+      });
+    };
+
+    // document.fonts is universally supported in the browsers this ships to,
+    // but it is absent in jsdom-style environments, hence the fallback.
+    const fontsReady = document.fonts?.ready ?? Promise.resolve();
+    // finally, not then: a font that fails to load still changed the layout.
+    fontsReady.finally(refresh);
+
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frame);
+    };
+    // layoutKey rebuilds the timeline, so a rebuilt one gets its own refresh.
+  }, [enabled, isBootComplete, layoutKey]);
 }

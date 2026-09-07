@@ -3,6 +3,7 @@
 import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
 
+import { LiveBadge } from "@/components/ui/LiveBadge";
 import { SourceLinks } from "@/components/ui/SourceLinks";
 import { StatusLed } from "@/components/ui/StatusLed";
 import { Tag } from "@/components/ui/Tag";
@@ -96,6 +97,11 @@ export function NodeDetailPanel() {
       </div>
 
       <div className="p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:p-5 sm:pb-[calc(1.25rem+env(safe-area-inset-bottom))]">
+        {/* The badge sits above the title rather than inline with it: the
+            panel is only 400px wide, and wrapping a long project name around a
+            chip is worse than giving the chip its own line. */}
+        {detail.isLive ? <LiveBadge className="mb-2.5" /> : null}
+
         <h2
           id="node-detail-title"
           className="text-xl font-semibold leading-snug tracking-tight text-signal"

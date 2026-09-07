@@ -29,7 +29,14 @@ export function Scene() {
       // the visual viewport and skew every pointer coordinate horizontally.
       // No margin, padding or transform here, so the drawing buffer maps 1:1
       // to the window and the raycaster needs no correction.
-      className="pointer-events-auto fixed inset-0 z-0"
+      //
+      // The explicit h-[100dvh] pins the height to the viewport the browser is
+      // currently showing. Browsers differ on what a fixed inset-0 box resolves
+      // to while a mobile address bar is mid-collapse, and any disagreement
+      // there resizes the drawing buffer on the first scroll — which is the
+      // glitch the scene showed on load. Stating the height removes the
+      // ambiguity; `bottom` is dropped by the over-constraint rules.
+      className="pointer-events-auto fixed inset-0 z-0 h-[100dvh]"
     >
       <SceneCanvas />
       {/*

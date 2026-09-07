@@ -1,7 +1,8 @@
 "use client";
 
-import { ChevronRight, Server } from "lucide-react";
+import { ChevronRight, ChevronsRight, Server } from "lucide-react";
 
+import { LiveBadge } from "@/components/ui/LiveBadge";
 import { SourceLinks } from "@/components/ui/SourceLinks";
 import { StatusLed } from "@/components/ui/StatusLed";
 import { useAppStore, type NodeKind } from "@/store/useAppStore";
@@ -34,18 +35,31 @@ export function NodePrompt({ kind, nodes, helper }: NodePromptProps) {
 
   return (
     <div>
-      <div className="rounded-md border border-dashed border-gunmetal-light/60 bg-surface/40 p-5 sm:p-6">
+      {/* Framed in core cyan rather than dashed gunmetal: this is the primary
+          call to action of the whole section, and visitors were reading the old
+          treatment as a disabled placeholder instead of an instruction. */}
+      <div className="rounded-md border border-core/30 bg-core/[0.04] p-5 shadow-core sm:p-6">
         <p className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.2em] text-core">
           <StatusLed />
           {nodes.length} {nodes.length === 1 ? "drive" : "drives"} online
         </p>
 
-        <p className="mt-4 flex items-start gap-2.5 text-base leading-relaxed text-signal sm:text-lg">
-          <Server
+        <p className="animate-pulse mt-4 flex items-center gap-3 text-base font-medium leading-relaxed text-core text-glow sm:text-lg">
+          <Server aria-hidden="true" className="h-5 w-5 shrink-0" />
+          <span className="flex-1">Click a server drive to extract data.</span>
+
+          {/*
+            Points at the live rack. Only rendered from `lg` up, which is
+            exactly where <SectionShell layout="split"> reserves the right-hand
+            column for it — on narrower screens the rack is centred behind this
+            copy, and an arrow to the right would send people the wrong way.
+          */}
+          <span
             aria-hidden="true"
-            className="mt-1 h-4 w-4 shrink-0 text-core"
-          />
-          Click a server drive to extract data.
+            className="hidden shrink-0 items-center lg:inline-flex"
+          >
+            <ChevronsRight className="animate-nudge-x h-6 w-6" />
+          </span>
         </p>
 
         <p className="mt-2.5 text-sm leading-relaxed text-muted">{helper}</p>
@@ -92,6 +106,10 @@ function FallbackRecord({
 
   return (
     <article className="rounded-sm border border-gunmetal bg-surface/60 p-4">
+      {/* Same badge as the 3D panel: a visitor browsing the accessible list
+          must not get a weaker version of the record than a mouse user. */}
+      {detail.isLive ? <LiveBadge className="mb-2.5" /> : null}
+
       <h3 className="text-sm font-medium leading-snug text-signal">
         {detail.title}
       </h3>

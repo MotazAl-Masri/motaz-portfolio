@@ -124,9 +124,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-void text-signal">
+      {/*
+        100dvh, not `min-h-full` (which resolved against html{height:100%}, i.e.
+        the *large* viewport) and not 100vh. Both of those are the tall
+        address-bar-hidden height, so on a phone the first paint was already
+        taller than the screen and the layout settled — visibly jumping — as the
+        bar collapsed. dvh tracks the height the browser is actually showing.
+      */}
+      <body className="flex min-h-[100dvh] flex-col bg-void text-signal">
         <script
           type="application/ld+json"
           // Serialised from a local object literal, never from user input.

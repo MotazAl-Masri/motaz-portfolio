@@ -29,6 +29,7 @@ export function BootSequence() {
   const [dismissed, setDismissed] = useState(false);
 
   const isSceneReady = useAppStore((state) => state.isSceneReady);
+  const setBootComplete = useAppStore((state) => state.setBootComplete);
   const { active: assetsLoading } = useProgress();
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -64,6 +65,12 @@ export function BootSequence() {
     const timer = window.setTimeout(() => setDismissed(true), FAILSAFE_MS);
     return () => window.clearTimeout(timer);
   }, []);
+
+  // Announce the end of boot exactly once, on whichever path got us here (the
+  // scene reporting ready, or the failsafe). The scroll rig re-measures on it.
+  useEffect(() => {
+    if (dismissed) setBootComplete();
+  }, [dismissed, setBootComplete]);
 
   if (dismissed) return null;
 
