@@ -58,13 +58,25 @@ const ZONE_PORTRAIT_PULL = 0.4;
  * rack the visitor is meant to interact with.
  */
 export const CAMERA_PATH: readonly CameraKeyframe[] = [
-  // Low and close to the floor, looking up the column — imposing.
+  /*
+   * The establishing shot, looking straight down the entrance aisle at the
+   * core. Framed by projection rather than by eye: the core's full 6.6-unit
+   * extent, plinth to head, lands inside the frame at every aspect from 21:9
+   * to 9:19.5, filling ~67% of the frame height on a 16:9 display.
+   *
+   * It used to sit at radius 10.5 / height -1.2 aimed at y 2.2, which cropped
+   * the plinth off the bottom of the frame and pointed the lens up the column
+   * from below — claustrophobic, and with a ring rack 2.9 units off the lens
+   * there was nothing to see anyway. The dolly back to 13.5 and the lower
+   * target recentre the core; the height stays just under it, so the shot keeps
+   * a slight upward tilt and the core still reads as towering.
+   */
   {
     id: "home",
     azimuth: 0,
-    radius: 10.5,
-    height: -1.2,
-    target: [0, 2.2, 0],
+    radius: 13.5,
+    height: -0.4,
+    target: [0, 0.9, 0],
     subjectShift: 0,
     portraitPull: 1,
   },
