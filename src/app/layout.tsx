@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { Scene } from "@/components/3d/Scene";
+import { AudioController } from "@/components/ui/AudioController";
 import { Backdrop } from "@/components/ui/Backdrop";
 import { BootSequence } from "@/components/ui/BootSequence";
 import { Footer } from "@/components/ui/Footer";
@@ -146,6 +147,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Scene />
         <ScrollSpy />
         <SmoothAnchors />
+        <AudioController />
         <Navbar />
         {/* Sits above the canvas (z-10 over z-0) but is pointer-transparent,
             so clicks in empty regions fall through to the 3D scene. Every

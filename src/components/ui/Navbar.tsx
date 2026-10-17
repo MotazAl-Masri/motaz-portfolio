@@ -3,6 +3,7 @@
 import { Menu, Server, X } from "lucide-react";
 import { useEffect } from "react";
 
+import { AudioToggle } from "@/components/ui/AudioToggle";
 import { StatusLed } from "@/components/ui/StatusLed";
 import { NAV_ITEMS, PROFILE } from "@/data";
 import { useAppStore } from "@/store/useAppStore";
@@ -31,7 +32,7 @@ export function Navbar() {
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 sm:px-8">
         <a
           href="#home"
-          className="group flex items-center gap-2.5"
+          className="group flex shrink-0 items-center gap-2.5"
           aria-label={`${PROFILE.name} — back to top`}
         >
           <Server
@@ -55,7 +56,7 @@ export function Navbar() {
                     href={`#${item.id}`}
                     aria-current={isActive ? "true" : undefined}
                     className={cn(
-                      "group flex items-center gap-1.5 rounded-sm px-3 py-2 font-mono text-xs tracking-wide transition-colors",
+                      "group flex items-center gap-1.5 rounded-sm px-2 py-2 font-mono text-xs tracking-wide transition-colors xl:px-3",
                       isActive
                         ? "text-core"
                         : "text-muted hover:text-signal",
@@ -78,27 +79,33 @@ export function Navbar() {
           </ul>
         </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
-          <StatusLed />
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
-            Core Online
-          </span>
-        </div>
+        <div className="flex items-center gap-2 md:gap-4">
+          {/* Tablet widths cannot fit the logo, all six links and this
+              readout on one row, so it waits for `lg`. */}
+          <div className="hidden items-center gap-2 lg:flex">
+            <StatusLed />
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
+              Core Online
+            </span>
+          </div>
 
-        <button
-          type="button"
-          onClick={toggleMenu}
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-nav"
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="rounded-sm border border-gunmetal p-2 text-muted transition-colors hover:border-core-dim hover:text-core md:hidden"
-        >
-          {isMenuOpen ? (
-            <X aria-hidden="true" className="h-4 w-4" />
-          ) : (
-            <Menu aria-hidden="true" className="h-4 w-4" />
-          )}
-        </button>
+          <AudioToggle />
+
+          <button
+            type="button"
+            onClick={toggleMenu}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-nav"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            className="rounded-sm border border-gunmetal p-2 text-muted transition-colors hover:border-core-dim hover:text-core md:hidden"
+          >
+            {isMenuOpen ? (
+              <X aria-hidden="true" className="h-4 w-4" />
+            ) : (
+              <Menu aria-hidden="true" className="h-4 w-4" />
+            )}
+          </button>
+        </div>
       </div>
 
       <nav

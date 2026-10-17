@@ -34,6 +34,12 @@ interface AppState {
   isBootComplete: boolean;
   selectedNode: NodeRef | null;
   hoveredNodeId: string | null;
+  /**
+   * Whether the visitor has switched sound on. Always starts false: browsers
+   * block audio that no click asked for, so sound is strictly opt-in. The
+   * audio itself follows this flag — see `AudioController`.
+   */
+  isAudioEnabled: boolean;
   setSceneReady: () => void;
   setBootComplete: () => void;
   setActiveSection: (section: SectionId) => void;
@@ -42,6 +48,7 @@ interface AppState {
   selectNode: (node: NodeRef) => void;
   clearNode: () => void;
   setHoveredNode: (id: string | null) => void;
+  toggleAudio: () => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -51,6 +58,7 @@ export const useAppStore = create<AppState>((set) => ({
   isBootComplete: false,
   selectedNode: null,
   hoveredNodeId: null,
+  isAudioEnabled: false,
 
   setSceneReady: () => set({ isSceneReady: true }),
   setBootComplete: () => set({ isBootComplete: true }),
@@ -69,4 +77,7 @@ export const useAppStore = create<AppState>((set) => ({
   selectNode: (node) => set({ selectedNode: node }),
   clearNode: () => set({ selectedNode: null }),
   setHoveredNode: (id) => set({ hoveredNodeId: id }),
+
+  toggleAudio: () =>
+    set((state) => ({ isAudioEnabled: !state.isAudioEnabled })),
 }));

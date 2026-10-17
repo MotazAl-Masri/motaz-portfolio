@@ -11,6 +11,7 @@ import {
   CORE_COLOR,
 } from "@/components/3d/constants";
 import { useAppStore, type NodeKind } from "@/store/useAppStore";
+import { playClickSound, playHoverSound } from "@/utils/audio";
 
 /** How far an active blade slides out, like a drive being pulled from its bay. */
 const SLIDE = 0.3;
@@ -123,6 +124,10 @@ export function ServerBlade({
           event.stopPropagation();
           setHoveredNode(id);
           document.body.style.cursor = "pointer";
+          // A touch "hover" is only the start of a tap or a scroll swipe, so
+          // it would tick on every swipe across the rack. Taps get the click
+          // sound instead.
+          if (event.pointerType !== "touch") playHoverSound();
         }}
         onPointerOut={(event) => {
           event.stopPropagation();
@@ -132,6 +137,7 @@ export function ServerBlade({
         onClick={(event) => {
           event.stopPropagation();
           selectNode({ kind, id });
+          playClickSound();
         }}
       >
         {/* Chassis. Noticeably lighter than the cabinet behind it, so the gap
