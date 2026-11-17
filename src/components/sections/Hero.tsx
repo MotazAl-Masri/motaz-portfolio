@@ -1,7 +1,7 @@
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Download } from "lucide-react";
 
 import { StatusLed } from "@/components/ui/StatusLed";
-import { PROFILE, PROJECTS } from "@/data";
+import { CV, PROFILE } from "@/data";
 
 export function Hero() {
   return (
@@ -46,6 +46,15 @@ export function Hero() {
             />
           </a>
           <a
+            href={CV.href}
+            download={CV.fileName}
+            className="inline-flex items-center justify-center gap-2 rounded-sm border border-gunmetal px-6 py-3 font-mono text-sm tracking-wide text-signal transition-colors hover:border-core hover:text-core"
+          >
+            <Download aria-hidden="true" className="h-4 w-4" />
+            {CV.label}
+            <span className="sr-only"> (PDF)</span>
+          </a>
+          <a
             href="#contact"
             className="inline-flex items-center justify-center gap-2 rounded-sm border border-gunmetal px-6 py-3 font-mono text-sm tracking-wide text-muted transition-colors hover:border-gunmetal-light hover:text-signal"
           >
@@ -53,11 +62,12 @@ export function Hero() {
           </a>
         </div>
 
+        {/* Every value below is backed by the Skills / Experience data. */}
         <dl className="mt-16 grid max-w-2xl grid-cols-2 gap-px overflow-hidden rounded-md border border-gunmetal bg-gunmetal sm:grid-cols-4">
-          <Stat label="Focus" value="Backend" />
-          <Stat label="Study Year" value="3rd" />
-          <Stat label="Projects" value={String(PROJECTS.length)} />
-          <Stat label="English" value="C2" />
+          <Stat label="Primary stack" value=".NET / Node" />
+          <Stat label="Testing" value="xUnit" />
+          <Stat label="API docs" value="OpenAPI" />
+          <Stat label="Study year" value="4th" />
         </dl>
 
         <p

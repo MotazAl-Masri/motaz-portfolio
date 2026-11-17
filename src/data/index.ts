@@ -78,6 +78,12 @@ export interface Experience {
    * "Live in production" badge, which is the first thing a recruiter reads.
    */
   isLive?: boolean;
+  /**
+   * One line of evidence that backs the "Live in production" badge, e.g. who
+   * uses it and since when. Optional: when omitted, nothing extra is rendered.
+   * Only fill it with facts you can stand behind in an interview.
+   */
+  liveNote?: string;
   /** How the source can be reached, omitted when there is no repository. */
   source?: SourceAccess;
 }
@@ -92,6 +98,8 @@ export interface Project {
   highlights: string[];
   /** Delivered and running in production. See {@link Experience.isLive}. */
   isLive?: boolean;
+  /** Evidence line for the badge. See {@link Experience.liveNote}. */
+  liveNote?: string;
   /** How the source can be reached, omitted when there is no repository. */
   source?: SourceAccess;
 }
@@ -108,6 +116,26 @@ export interface ContactChannel {
   /** `null` until the real value is supplied — never render a guessed value. */
   value: string | null;
   href: string | null;
+}
+
+/** Downloadable CV. The PDF itself must exist in /public under `href`. */
+export interface CvFile {
+  label: string;
+  /** Public path of the PDF, e.g. /public/Motaz-Al-Masri-CV.pdf -> "/Motaz-Al-Masri-CV.pdf". */
+  href: string;
+  /** Suggested file name for the browser's download dialog. */
+  fileName: string;
+}
+
+/**
+ * Practical hiring details. Each field is `null` until the real value is
+ * supplied; the Contact section renders only the fields that are set.
+ */
+export interface Availability {
+  /** e.g. "UTC+3" — your working timezone. */
+  timezone: string | null;
+  /** e.g. "Open to remote and relocation" — only what is actually true. */
+  workModes: string | null;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -131,15 +159,34 @@ export const PROFILE: Profile = {
   name: "Motaz Al-Masri",
   role: "Backend Developer",
   headline:
-    "Backend Developer & 3rd-Year Information Engineering Student at Damascus University.",
+    "Backend Developer & 4th-Year Information Engineering Student at Damascus University.",
   metaDescription:
-    "Portfolio of Motaz Al-Masri, a passionate Backend Developer and Information Engineering student specializing in scalable systems, clean architecture, and secure APIs.",
+    "Motaz Al-Masri — Backend Developer building secure, tested REST APIs with .NET, Node.js and Clean Architecture. Information Engineering student at Damascus University.",
   education: {
-    degree: "Information Engineering — 3rd Year",
+    degree: "Information Engineering — 4th Year",
     institution: "Damascus University",
     period: "2023 – Present",
   },
   languages: ["English — C2"],
+};
+
+/* -------------------------------------------------------------------------- */
+/*  CV                                                                         */
+/* -------------------------------------------------------------------------- */
+
+export const CV: CvFile = {
+  label: "Download CV",
+  href: "/Motaz-Al-Masri-CV.pdf",
+  fileName: "Motaz-Al-Masri-CV.pdf",
+};
+
+/* -------------------------------------------------------------------------- */
+/*  Availability                                                               */
+/* -------------------------------------------------------------------------- */
+
+export const AVAILABILITY: Availability = {
+  timezone: "UTC+3", // e.g. "UTC+3"
+  workModes: "Open to remote and relocation", // e.g. "Open to remote and relocation"
 };
 
 /* -------------------------------------------------------------------------- */
@@ -220,12 +267,13 @@ export const EXPERIENCES: Experience[] = [
     stack: [".NET 10.0", "EF Core 10", "Clean Architecture"],
     highlights: [
       "Built the Hospital Storage Management System (HSMS).",
-      "Engineered robust logistics workflows with State Machines.",
-      "Wrapped inventory batch creations in atomic database transactions.",
-      "Implemented Magic Bytes validation to mitigate DoS.",
+      "Modelled logistics workflows as explicit State Machines.",
+      "Wrapped inventory batch creation in atomic database transactions.",
+      "Implemented Magic Bytes validation on uploaded files to reject spoofed file types.",
       "Wrote xUnit integration tests.",
     ],
     isLive: true,
+    liveNote: "In use at a hospital",
     source: { visibility: "private", note: PRIVATE_SOURCE_NOTE },
   },
 ];
@@ -252,12 +300,13 @@ export const PROJECTS: Project[] = [
       "Firebase Cloud Messaging",
     ],
     highlights: [
-      "5 distinct roles",
-      "Sub-50ms API responses",
-      "100% data consistency",
-      "Firebase for real-time notifications",
+      "Role-based access control across 5 distinct roles",
+      "Sub-50ms API responses in development and testing environments",
+      "Multi-step writes wrapped in Prisma transactions to prevent partial updates",
+      "Push notifications delivered through Firebase Cloud Messaging",
     ],
     isLive: true,
+    liveNote: "In use at a real school for 3+ months",
     source: { visibility: "private", note: PRIVATE_SOURCE_NOTE },
   },
   {
@@ -267,9 +316,9 @@ export const PROJECTS: Project[] = [
     date: "March 2026",
     summary:
       "A rental listings platform API with OTP-validated access and query-tuned property search.",
-    stack: ["REST APIs", "OTP validation"],
+    stack: ["Laravel", "MySQL", "REST APIs", "OTP validation"],
     highlights: [
-      "Minimized property search times by 75%",
+      "Estimated 75% reduction in property search time compared with the paper-based process, based on the project's study",
       "Optimized relational database queries",
     ],
     source: {

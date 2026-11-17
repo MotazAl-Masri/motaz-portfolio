@@ -19,7 +19,7 @@ The core concept is "My Portfolio is my Server". The website is a 3D futuristic 
 ## 3. Core Data (Strictly adhere to this, DO NOT INVENT DATA)
 **About:**
 - Name: Motaz Al-Masri
-- Title: Backend Developer & 3rd-Year Information Engineering Student at Damascus University (2023–Present). English C2.
+- Title: Backend Developer & 4th-Year Information Engineering Student at Damascus University (2023–Present). English C2.
 
 **Technical Skills:**
 - Backend Core: .NET 10.0, C#, Node.js, Express.js, Laravel, PHP, JavaScript, Java, C++

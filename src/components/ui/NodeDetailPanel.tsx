@@ -99,8 +99,19 @@ export function NodeDetailPanel() {
       <div className="p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:p-5 sm:pb-[calc(1.25rem+env(safe-area-inset-bottom))]">
         {/* The badge sits above the title rather than inline with it: the
             panel is only 400px wide, and wrapping a long project name around a
-            chip is worse than giving the chip its own line. */}
-        {detail.isLive ? <LiveBadge className="mb-2.5" /> : null}
+            chip is worse than giving the chip its own line. The evidence line
+            (liveNote) sits right under it, so the claim and its proof read
+            together. */}
+        {detail.isLive ? (
+          <div className="mb-2.5 flex flex-col items-start gap-2">
+            <LiveBadge />
+            {detail.liveNote ? (
+              <p className="text-xs leading-relaxed text-muted">
+                {detail.liveNote}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
 
         <h2
           id="node-detail-title"

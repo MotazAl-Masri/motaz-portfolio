@@ -19,6 +19,8 @@ export interface NodeDetail {
   summary?: string;
   /** Delivered and running in production — drives the <LiveBadge />. */
   isLive?: boolean;
+  /** One line of evidence shown next to the badge, when provided in data. */
+  liveNote?: string;
   lists: NodeDetailList[];
   /** How the source can be reached, absent for records that have none. */
   source?: SourceAccess;
@@ -41,6 +43,7 @@ export function resolveNodeDetail(node: NodeRef): NodeDetail | null {
       meta: `${project.platform} — ${project.date}`,
       summary: project.summary,
       isLive: project.isLive,
+      liveNote: project.liveNote,
       lists: [
         { label: "Highlights", items: project.highlights },
         { label: "Stack", items: project.stack },
@@ -70,6 +73,7 @@ export function resolveNodeDetail(node: NodeRef): NodeDetail | null {
     meta: `${experience.company} — ${experience.period}`,
     summary: experience.programme,
     isLive: experience.isLive,
+    liveNote: experience.liveNote,
     lists: [
       { label: "Highlights", items: experience.highlights },
       { label: "Stack", items: experience.stack },
