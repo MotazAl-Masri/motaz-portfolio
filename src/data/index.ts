@@ -319,7 +319,8 @@ export const PROJECTS: Project[] = [
     stack: ["Laravel", "MySQL", "REST APIs", "OTP validation"],
     highlights: [
       "Estimated 75% reduction in property search time compared with the paper-based process, based on the project's study",
-      "Optimized relational database queries",
+      "Used Laravel eager loading to avoid N+1 queries",
+      "Rewrote and consolidated slow queries; added pagination and selected only the columns needed",
     ],
     source: {
       visibility: "public",
